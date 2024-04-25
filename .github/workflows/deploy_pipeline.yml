@@ -358,5 +358,4 @@ jobs:
           mode: mode
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           label: ${{ needs.start_runner.outputs.label }}
-          ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}
-          
+          ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}   
