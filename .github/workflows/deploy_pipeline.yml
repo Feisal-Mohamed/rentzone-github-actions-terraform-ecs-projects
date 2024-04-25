@@ -139,4 +139,3 @@ jobs:
       ecs_service_name: ${{ env.ECS_SERVICE_NAME }}
       environment_file_name: ${{ env.ENVIRONMENT_FILE_NAME }}
       env_file_bucket_name: ${{ env.ENV_FILE_BUCKET_NAME }}
-      
