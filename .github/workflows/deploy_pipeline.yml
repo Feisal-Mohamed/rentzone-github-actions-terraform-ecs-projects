@@ -331,7 +331,6 @@ jobs:
           FLYWAY_USER: ${{ secrets.RDS_DB_USERNAME }}
           FLYWAY_PASSWORD: ${{ secrets.RDS_DB_PASSWORD }}
           FLYWAY_LOCATION: filesystem:sql
-        working-directory: ./flyway-${{ env.FLYWAY_VERSION }}
         run: |
           flyway -url=${{ env.FLYWAY_URL }} \
             -user=${{ env.FLYWAY_USER }} \
@@ -359,4 +358,3 @@ jobs:
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           label: ${{ needs.start_runner.outputs.label }}
           ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}   
-          
