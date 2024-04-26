@@ -353,9 +353,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Stop EC2 runner
-        uses: aws-github-actions/ec2-stop-instance@v1
-        with:
-          instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}
-          region: us-east-1
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
