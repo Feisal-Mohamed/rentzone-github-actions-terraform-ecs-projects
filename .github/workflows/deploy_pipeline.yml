@@ -341,6 +341,7 @@ jobs:
 
   # Stop the self-hosted EC2 runner
   # Stop the self-hosted EC2 runner
+  # Stop the self-hosted EC2 runner
   stop_runner:
     name: Stop self-hosted EC2 runner
     needs:
@@ -357,20 +358,15 @@ jobs:
         run: |
           echo "start_runner outputs: ${{ needs.start_runner.outputs }}"
           echo "Database Instance ID: ${{ needs.start_runner.outputs.database_instance_identifier }}"
-          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.database_instance_identifier }}"
+          echo "instance_id=${{ needs.start_runner.outputs.database_instance_identifier }}" >> $GITHUB_ENV
       
-      - name: Get Database Instance ID
-        id: get_instance_id
-        run: |
-          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.database_instance_identifier }}"
-        
       - name: Debugging - Check retrieved instance ID
         run: |
-          echo "Retrieved Instance ID: ${{ steps.get_instance_id.outputs.instance_id }}"
+          echo "Retrieved Instance ID: ${{ env.instance_id }}"
         
       - name: Stop EC2 runner
         run: |
-          instance_id="${{ steps.get_instance_id.outputs.instance_id }}"
+          instance_id="${{ env.instance_id }}"
           if [ -n "$instance_id" ]; then
             aws ec2 stop-instances --instance-ids $instance_id --region us-east-1
           else
@@ -380,6 +376,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 
   
   
