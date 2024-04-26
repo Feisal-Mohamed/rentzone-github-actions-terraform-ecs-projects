@@ -338,23 +338,22 @@ jobs:
             -password=${{ env.FLYWAY_PASSWORD }} \
             -locations=${{ env.FLYWAY_LOCATION }} migrate
 
-  # Stop the self-hosted EC2 runner
-  stop_runner:
-    name: Stop self-hosted EC2 runner
-    needs:
-      - configure_aws_credentials
-      - deploy_aws_infrastructure
-      - start_runner
-      - build_and_push_image
-      - export_env_variables
-      - migrate_data
-    if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Stop EC2 runner
-        uses: aws-github-actions/ec2-stop-instance@v1
-        with:
-          instance-id: ${{ needs.start_runner.outputs.database_instance_identifier }}
-          region: us-east-1
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# Stop the self-hosted EC2 runner
+stop_runner:
+  name: Stop self-hosted EC2 runner
+  needs:
+    - configure_aws_credentials
+    - deploy_aws_infrastructure
+    - start_runner
+    - build_and_push_image
+    - export_env_variables
+    - migrate_data
+  if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
+  runs-on: ubuntu-latest
+  steps:
+    - name: Stop EC2 runner
+      run: |
+        aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.database_instance_identifier }} --region us-east-1
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
