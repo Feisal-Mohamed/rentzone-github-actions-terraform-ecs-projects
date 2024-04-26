@@ -340,6 +340,7 @@ jobs:
 
 
   # Stop the self-hosted EC2 runner
+  # Stop the self-hosted EC2 runner
   stop_runner:
     name: Stop self-hosted EC2 runner
     needs:
@@ -355,13 +356,13 @@ jobs:
       - name: Debugging - Check instance ID
         run: |
           echo "start_runner outputs: ${{ needs.start_runner.outputs }}"
-          echo "EC2 Instance ID: ${{ needs.start_runner.outputs.ec2-instance-id }}"
-          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
+          echo "Database Instance ID: ${{ needs.start_runner.outputs.database_instance_identifier }}"
+          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.database_instance_identifier }}"
       
-      - name: Get EC2 Instance ID
+      - name: Get Database Instance ID
         id: get_instance_id
         run: |
-          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
+          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.database_instance_identifier }}"
         
       - name: Debugging - Check retrieved instance ID
         run: |
@@ -379,6 +380,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
   
   
   
