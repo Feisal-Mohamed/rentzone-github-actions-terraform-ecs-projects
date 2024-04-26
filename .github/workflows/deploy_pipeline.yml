@@ -367,7 +367,7 @@ jobs:
         
       - name: Stop EC2 runner
         run: |
-          aws ec2 stop-instances --instance-ids ${{ steps.get_instance_id.outputs.instance-id }} --region us-east-1
+          aws ec2 stop-instances --instance-ids ${{ steps.get_instance_id.outputs.instance-id }} --region us-east-1a
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
