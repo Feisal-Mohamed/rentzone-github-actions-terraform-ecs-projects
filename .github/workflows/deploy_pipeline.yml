@@ -338,9 +338,6 @@ jobs:
             -password=${{ env.FLYWAY_PASSWORD }} \
             -locations=${{ env.FLYWAY_LOCATION }} migrate
 
-
-  # Stop the self-hosted EC2 runner
-  # Stop the self-hosted EC2 runner
   # Stop the self-hosted EC2 runner
   stop_runner:
     name: Stop self-hosted EC2 runner
@@ -354,30 +351,10 @@ jobs:
     if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
     runs-on: ubuntu-latest
     steps:
-      - name: Debugging - Check instance ID
-        run: |
-          echo "start_runner outputs: ${{ needs.start_runner.outputs }}"
-          echo "Database Instance ID: ${{ needs.start_runner.outputs.database_instance_identifier }}"
-          echo "instance_id=${{ needs.start_runner.outputs.database_instance_identifier }}" >> $GITHUB_ENV
-      
-      - name: Debugging - Check retrieved instance ID
-        run: |
-          echo "Retrieved Instance ID: ${{ env.database_instance_identifier }}"
-        
       - name: Stop EC2 runner
-        run: |
-          instance_id="${{ env.database_instance_identifier }}"
-          if [ -n "$instance_id" ]; then
-            aws ec2 stop-instances --instance-ids $instance_id --region us-east-1
-          else
-            echo "No instance ID provided. Unable to stop EC2 instance."
-            exit 1
-          fi
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-
-  
-  
-  
+        uses: aws-github-actions/ec2-stop-instance@v1
+        with:
+          instance-id: ${{ needs.start_runner.outputs.database_instance_identifier }}
+          region: us-east-1
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
