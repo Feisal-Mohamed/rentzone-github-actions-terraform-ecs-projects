@@ -21,7 +21,7 @@ jobs:
     name: Configure AWS credentials
     runs-on: ubuntu-latest
     steps:
-      - name: 
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
