@@ -352,12 +352,22 @@ jobs:
     if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
     runs-on: ubuntu-latest
     steps:
+      - name: Get EC2 Instance ID
+        id: get_instance_id
+        run: |
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Automation,Values=terraform" "Name=tag:Environment,Values=dev" "Name=tag:Project,Values=rentzone" --query "Reservations[].Instances[].InstanceId" --output text)
+          echo "::set-output name=instance-id::$INSTANCE_ID"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Debug - Print EC2 instance ID
         run: |
-          echo "EC2 Instance ID: ${{ needs.start_runner.outputs.ec2-instance-id }}"
+          echo "EC2 Instance ID: ${{ steps.get_instance_id.outputs.instance-id }}"
+        
       - name: Stop EC2 runner
         run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
+          aws ec2 stop-instances --instance-ids ${{ steps.get_instance_id.outputs.instance-id }} --region us-east-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
