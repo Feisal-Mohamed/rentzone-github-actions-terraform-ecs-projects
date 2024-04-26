@@ -352,10 +352,19 @@ jobs:
     if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
     runs-on: ubuntu-latest
     steps:
+      - name: Debugging - Check instance ID
+        run: |
+          echo "start_runner outputs: ${{ needs.start_runner.outputs }}"
+          echo "EC2 Instance ID: ${{ needs.start_runner.outputs.ec2-instance-id }}"
+          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
+      
       - name: Get EC2 Instance ID
         id: get_instance_id
         run: echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
-      
+        
+      - name: Debugging - Check retrieved instance ID
+        run: echo "Retrieved Instance ID: ${{ steps.get_instance_id.outputs.instance_id }}"
+        
       - name: Stop EC2 runner
         run: |
           instance_id="${{ steps.get_instance_id.outputs.instance_id }}"
@@ -368,5 +377,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
   
   
