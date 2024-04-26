@@ -201,7 +201,7 @@ jobs:
           mode: start
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ec2-image-id: ami-09cc9197d4019a094
-          ec2-instance-type: t2.micro
+          ec2-instance-type: t3.micro
           subnet-id: ${{ needs.deploy_aws_infrastructure.outputs.private_data_subnet_az1_id }}
           security-group-id: ${{ needs.deploy_aws_infrastructure.outputs.runner_security_group_id }}
           aws-resource-tags: > 
@@ -339,6 +339,7 @@ jobs:
             -password=${{ env.FLYWAY_PASSWORD }} \
             -locations=${{ env.FLYWAY_LOCATION }} migrate
 
+
   # Stop the self-hosted EC2 runner
   stop_runner:
     name: Stop self-hosted EC2 runner
@@ -367,10 +368,7 @@ jobs:
         
       - name: Stop EC2 runner
         run: |
-          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          label: ${{ needs.start_runner.outputs.label }}
           aws ec2 stop-instances --instance-ids ${{ steps.get_instance_id.outputs.ec2-instance-id }} --region us-east-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
