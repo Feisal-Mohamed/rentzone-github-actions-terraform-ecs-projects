@@ -360,10 +360,12 @@ jobs:
       
       - name: Get EC2 Instance ID
         id: get_instance_id
-        run: echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
+        run: |
+          echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
         
       - name: Debugging - Check retrieved instance ID
-        run: echo "Retrieved Instance ID: ${{ steps.get_instance_id.outputs.instance_id }}"
+        run: |
+          echo "Retrieved Instance ID: ${{ steps.get_instance_id.outputs.instance_id }}"
         
       - name: Stop EC2 runner
         run: |
