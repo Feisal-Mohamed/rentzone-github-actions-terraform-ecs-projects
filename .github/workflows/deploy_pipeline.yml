@@ -362,11 +362,11 @@ jobs:
       
       - name: Debugging - Check retrieved instance ID
         run: |
-          echo "Retrieved Instance ID: ${{ env.instance_id }}"
+          echo "Retrieved Instance ID: ${{ env.database_instance_identifier }}"
         
       - name: Stop EC2 runner
         run: |
-          instance_id="${{ env.instance_id }}"
+          instance_id="${{ env.database_instance_identifier }}"
           if [ -n "$instance_id" ]; then
             aws ec2 stop-instances --instance-ids $instance_id --region us-east-1
           else
