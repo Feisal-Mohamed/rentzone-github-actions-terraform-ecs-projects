@@ -315,7 +315,7 @@ jobs:
 
       - name: Download Flyway
         run: |
-         wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${{ env.FLYWAY_VERSION }}/flyway-commandline-${{ env.FLYWAY_VERSION }}-linux-x64.tar.gz | sudo rm -R /usr/local/bin/flyway | tar xvz && sudo ln -s `pwd`/flyway-${{ env.FLYWAY_VERSION }}/flyway /usr/local/bin 
+         wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${{ env.FLYWAY_VERSION }}/flyway-commandline-${{ env.FLYWAY_VERSION }}-linux-x64.tar.gz | tar xvz && sudo ln -s `pwd`/flyway-${{ env.FLYWAY_VERSION }}/flyway /usr/local/bin 
 
       - name: Remove the placeholder (sql) directory0
         run: |
@@ -353,9 +353,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Stop EC2 runner
-        uses: machulav/ec2-github-runner@v2
+        uses: aws-github-actions/ec2-stop-instance@v1
         with:
-          mode: stop
-          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          label: ${{ needs.start_runner.outputs.label }}
-          ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }} 
+          instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}
+          region: us-east-1
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
