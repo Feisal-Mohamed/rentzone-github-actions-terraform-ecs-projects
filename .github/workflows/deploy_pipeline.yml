@@ -367,6 +367,8 @@ jobs:
         
       - name: Stop EC2 runner
         run: |
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          label: ${{ needs.start_runner.outputs.label }}
           aws ec2 stop-instances --instance-ids ${{ steps.get_instance_id.outputs.ec2-instance-id }} --region us-east-1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
