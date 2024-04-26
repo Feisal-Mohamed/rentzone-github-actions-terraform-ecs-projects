@@ -351,6 +351,9 @@ jobs:
     if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
     runs-on: ubuntu-latest
     steps:
+      - name: Debug - Print EC2 instance ID
+        run: |
+          echo "EC2 Instance ID: ${{ needs.start_runner.outputs.ec2-instance-id }}"
       - name: Stop EC2 runner
         run: |
           aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
