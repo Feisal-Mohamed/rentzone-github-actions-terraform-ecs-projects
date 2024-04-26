@@ -354,10 +354,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Stop EC2 runner
-        uses: machulav/ec2-github-runner@v3
-        with:
-          mode: stop
-          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          label: ${{ needs.start_runner.outputs.label }}
-          ec2-instance-id: ${{ needs.start_runner.outputs.ec2-instance-id }}
+        run: |
+          aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
    
