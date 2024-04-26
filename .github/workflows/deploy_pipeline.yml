@@ -352,10 +352,21 @@ jobs:
     if: needs.deploy_aws_infrastructure.outputs.terraform_action != 'destroy' && always() 
     runs-on: ubuntu-latest
     steps:
+      - name: Get EC2 Instance ID
+        id: get_instance_id
+        run: echo "::set-output name=instance_id::${{ needs.start_runner.outputs.ec2-instance-id }}"
+      
       - name: Stop EC2 runner
         run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
+          instance_id="${{ steps.get_instance_id.outputs.instance_id }}"
+          if [ -n "$instance_id" ]; then
+            aws ec2 stop-instances --instance-ids $instance_id --region us-east-1
+          else
+            echo "No instance ID provided. Unable to stop EC2 instance."
+            exit 1
+          fi
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
   
