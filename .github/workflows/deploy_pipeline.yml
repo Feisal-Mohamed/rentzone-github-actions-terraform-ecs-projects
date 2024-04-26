@@ -355,9 +355,15 @@ jobs:
     steps:
       - name: Stop EC2 runner
         run: |
-          aws ec2 stop-instances --instance-ids ${{ needs.start_runner.outputs.ec2-instance-id }} --region us-east-1
+          runner_instance_id=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=ec2-github-runner" "Name=instance-state-name,Values=running" --query 'Reservations[].Instances[].InstanceId' --output text)
+          if [ -n "$runner_instance_id" ]; then
+            aws ec2 stop-instances --instance-ids $runner_instance_id --region us-east-1
+          else
+            echo "No running instance found for the GitHub runner."
+          fi
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
   
    
