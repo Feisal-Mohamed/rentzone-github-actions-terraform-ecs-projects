@@ -429,7 +429,7 @@ jobs:
           ECS_SERVICE_NAME: ${{ needs.deploy_aws_infrastructure.outputs.ecs_service_name }}
           TD_NAME: ${{ needs.deploy_aws_infrastructure.outputs.task_definition_name }}
         run: |
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition ${{ env.TD_NAME }}:${{ needs.create_td_revision }} --force-new-deployment
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition ${{ env.TD_NAME }}:${{ needs.create_td_revision.outputs.new_td_revision }} --force-new-deployment
 
       - name: Wait for ECS service to become stable
         env:
@@ -437,4 +437,3 @@ jobs:
           ECS_SERVICE_NAME: ${{ needs.deploy_aws_infrastructure.outputs.ecs_service_name }}
         run: |
           aws ecs wait services-stable --cluster ${{ env.ECS_CLUSTER_NAME }} --services ${{ env.ECS_SERVICE_NAME }}
-          
