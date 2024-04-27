@@ -4,13 +4,9 @@ This repository contains the infrastructure as code and CI/CD pipeline setup for
 
 ## Architecture Diagram
 
-*(Insert architecture diagram here)*
-
 ![Architecture Diagram](architecture_diagram.png)
 
 ## Website Screenshot
-
-*(Insert screenshot of the deployed website here)*
 
 ![Website Screenshot](website_screenshot.png)
 
