@@ -2,6 +2,10 @@
 
 This repository contains the infrastructure as code and CI/CD pipeline setup for deploying an application on AWS using Terraform and GitHub Actions.
 
+## Architecture Diagram
+
+![Architecture Diagram](architecture_diagram.png)
+
 ## Website Screenshot
 
 ![Website Screenshot](website_screenshot.png)
