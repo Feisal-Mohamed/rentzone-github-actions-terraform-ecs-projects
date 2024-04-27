@@ -82,7 +82,3 @@ To use this repository:
 2. Modify the Terraform code to suit your requirements.
 3. Set up secrets and environment variables as needed.
 4. Push changes to trigger the CI/CD pipeline.
-
----
-
-Feel free to customize this README further with specific details or additional instructions as needed.
